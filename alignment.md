@@ -3,7 +3,7 @@
 We will first map the data to the Human reference genome using [BWA](https://github.com/lh3/bwa). To speed up the mapping the reference genome needs to be indexed. BWA uses an FM-Index which is built around the [Burrows-Wheeler transform](https://de.wikipedia.org/wiki/Burrows-Wheeler-Transformation).
 
 ```bash
-cd /data/rddata/
+cd /data/rd/
 bwa index chr7.fa
 ls -rt1 chr7.fa*
 ```

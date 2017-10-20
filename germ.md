@@ -3,6 +3,7 @@
 To get an idea of how structural variants look like in short read, next-generation sequencing data let's download the [1000 Genomes SV polymorphism catalogue](https://www.ncbi.nlm.nih.gov/pubmed/26432246).
 
 ```shell
+cd /data/sv/
 wget 'ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/integrated_sv_map/ALL.wgs.mergedSV.v8.20130502.svs.genotypes.vcf.gz'
 wget 'ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/integrated_sv_map/ALL.wgs.mergedSV.v8.20130502.svs.genotypes.vcf.gz.tbi'
 ```
