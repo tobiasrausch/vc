@@ -27,16 +27,14 @@ As you will notice most 1000 Genomes SVs are deletions because these are easier 
 
 ```shell
 samtools faidx chr2.fa chr2:18905691-18907969
-samtools faidx chr2.fa chr2:72439663-72441941
 samtools faidx chr2.fa chr2:96210505-96212783
 ```
 
-As part of the SV consortium we validated the above complex SVs using PacBio. The reads are in a separate FASTA file called pacbio.fa. Please align the above genomic reference subsequences against these PacBio reads using [gear.embl.de](gear.embl.de). 
+As part of the SV consortium we validated the above complex SVs using PacBio. The reads are in a separate FASTA file called pacbio.sv1.fa and pacbio.sv2.fa. Please align the above genomic reference subsequences against these PacBio reads using [Maze](https://gear.embl.de/maze/) available on [gear.embl.de](https://gear.embl.de). You can, of course, also pick a slightly smaller/larger reference genomic subsequence to align the full PacBio read.
 
 ***Exercises***
 
 * What kind of SV is happening in the region chr2:18905691-18907969 ?
-* What kind of SV is happening in the region chr2:72439663-72441941 ?
 * What kind of SV is happening in the region chr2:96210505-96212783 ?
 
 
