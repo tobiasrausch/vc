@@ -166,34 +166,29 @@ head snps.pos
 Using [SAMtools](http://www.htslib.org) and [BCFtools](http://www.htslib.org) we can annotate the allelic depth for every SNP.
 
 ```shell
-samtools mpileup -go mp.bcf -f chrX.fa -t AD -l snps.pos tu.bam wt.bam
+samtools mpileup -go mp.bcf -f chr2.fa -t AD -l snps.pos tumor.bam
 bcftools call -vmAO z -o mp.vcf.gz mp.bcf
-zcat mp.vcf.gz | grep -v "^##" | cut -f 1,2,4,5,10,11  | sed 's/[^\t]*://g' > ad.tsv
+zcat mp.vcf.gz | grep "^#" -A 1
+```
+
+Let us first filter for bi-allelic SNPs at coverage >=5 and then extract AD (allelic depth). In the last step we calculate the so-called B-allele frequency.
+
+```shell
+bcftools filter -i 'DP>=10' mp.vcf.gz | bcftools view -m2 -M2 -v snps - | bcftools query -f '%CHROM\t%POS[\t%AD]\n' > ad.tsv
+cat ad.tsv | tr ',' '\t' | awk '{print $2"\t"($4)/($3+$4);}' > baf.tsv
 ```
 
 Let's look at the allelic counts using R.
-
-```shell
-tail -n +2 ad.tsv | cut -f 2,5,6 | tr ',' '\t' | awk 'NF==5' > ad.counts
-R
-```
 
 ```R
 library(ggplot2)
 library(reshape2)
 library(scales)
-co = read.table("ad.counts", header=F)
-colnames(co) = c("POS", "tREF", "tALT", "wREF", "wALT")
-co$tCOV=co$tREF+co$tALT 
-co$wCOV=co$wREF+co$wALT
-co$tVAF=co$tALT/co$tCOV
-co$wVAF=co$wALT/co$wCOV
-hist(co$wVAF)
-hist(co$tVAF)
-q=ggplot(data=co, aes(x=co$POS, y=co$tVAF))
-q=q + geom_point(alpha=1/4, size=1)
-q=q + geom_point(aes(x=co$POS, y=1-co$tVAF), alpha=1/4, size=1)
-q=q + xlab("chrX") + ylab("Variant Allele Frequency") 
+co = read.table("baf.tsv", header=F)
+colnames(co) = c("pos", "baf")
+q=ggplot(data=co, aes(x=pos, y=baf))
+q=q + geom_jitter(alpha=1/8, size=0.5, width=0, height=0.1)
+q=q + xlab("chr2") + ylab("Variant Allele Frequency") 
 q=q + scale_x_continuous(labels = comma)
 q
 ```
@@ -202,11 +197,8 @@ Of course, this plot is more informative if we can also see the read-depth.
 
 ```R
 library(grid)
-library(DNAcopy)
 grid.newpage()
 pushViewport(viewport(layout=grid.layout(6,1)))
 print(q, vp = viewport(layout.pos.row=1:2, layout.pos.col=1))
-print(p, vp = viewport(layout.pos.row=3:6, layout.pos.col=1))
+print(p3, vp = viewport(layout.pos.row=3:6, layout.pos.col=1))
 ```
-
-
