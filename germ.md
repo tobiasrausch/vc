@@ -58,7 +58,7 @@ library(ggplot2)
 cov=read.table("stats.coverage.tsv", header=T)
 p=ggplot(data=cov, aes(x=Coverage, y=Count))
 p=p + geom_line()
-p=p + coord_cartesian(xlim=c(0,50))
+p=p + coord_cartesian(xlim=c(0,20))
 p
 isize=read.table("stats.isize.tsv", header=T)
 q=ggplot(data=isize, aes(x=InsertSize, y=Count))
