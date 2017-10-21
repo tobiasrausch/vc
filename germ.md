@@ -12,7 +12,7 @@ To increase the chance that our sample of interest is a carrier of one of these 
 
 ```shell
 bcftools view ALL.wgs.mergedSV.v8.20130502.svs.genotypes.vcf.gz 2 | bcftools filter -O z -o common.vcf.gz -i 'EUR_AF>=0.8' -
-/g/solexa/home/rausch/scripts/cpp/svprops/src/svprops common.vcf.gz  | tail -n +2 | cut -f 1,2,4,5 > svs.bed
+svprops common.vcf.gz  | tail -n +2 | cut -f 1,2,4,5 > svs.bed
 ```
 
 We then start IGV using the chr2 reference sequence.
