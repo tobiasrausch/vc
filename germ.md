@@ -72,6 +72,5 @@ quit()
 ***Exercises***
 
 * What is the median coverage of the data set?
-* What is the meaning of the different library layouts (F+, F-, R+, R-)?
-* What is the duplicate fraction in the library?
+* Given the insert size distribution, what would be a suitable cutoff to define deletion supporting paired-ends?
 
