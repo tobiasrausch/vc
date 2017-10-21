@@ -144,6 +144,9 @@ ggsave("cov2.pdf", width=9, height=6)
 In addition, you might also want to segment the read-depth ratios using the [DNAcopy](https://bioconductor.org/packages/release/bioc/html/DNAcopy.html) R package.
 
 ```R
+library(ggplot2)
+library(reshape2)
+library(scales)
 library(DNAcopy)
 seg=segments.summary(segment(smooth.CNA(CNA(cov$value, rep("chr2", nrow(cov)), cov$pos, data.type="logratio", sampleid="tumor"))))
 p3=p2 + geom_segment(data=seg, aes(x=loc.start, y=seg.median, xend=loc.end, yend=seg.median), colour="darkorange")
