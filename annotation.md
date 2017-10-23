@@ -36,7 +36,7 @@ samtools faidx chr7.fa chr7:2954300-2954850
 samtools faidx chr7.fa chr7:2954900-2955450
 ```
 
-The primers are locally unique and have the appropriate Tm but they are not necessarily unique in the entire genome. We can use [In-silico PCR](https://genome.ucsc.edu/cgi-bin/hgPcr) to check genome-wide uniqueness. Try different combinations of left and right primers and possibly change parameters in Primer3Plus to generate further candidates until you found a good pair of primers to validate the mutation.
+The primers are locally unique and have the appropriate Tm but they are not necessarily unique in the entire genome. We can use [Silica](https://gear.embl.de/silica), a tool for [In-silico PCR](https://en.wikipedia.org/wiki/In_silico_PCR), to check genome-wide uniqueness. Try different combinations of left and right primers and possibly change parameters in Primer3Plus to generate further candidates until you found a good pair of primers to validate the mutation.
 
 We do not have the time to run the PCR experiment and sequence the breakpoint mutation but the Sanger validation files of the original study are in the data folder:
 
