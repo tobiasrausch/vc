@@ -57,32 +57,34 @@ bcftools filter -i '%QUAL>20' snv.vcf.gz  | bcftools stats | grep "TSTV"
 bcftools filter -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz  | bcftools stats | grep "TSTV"
 ```
 
-Another useful bulk metric is the length of indels in exons because most InDel polymorphisms should be in-frame. In order to check this we first need to get exon coordinates.
-
-```R
-library(GenomicFeatures)
-db=makeTxDbFromUCSC(genome="hg19", tablename="ccdsGene")
-ex=keepStandardChromosomes(reduce(exons(db), ignore.strand=T))
-df=data.frame(chr=seqnames(ex), start=start(ex), end=end(ex))
-write.table(df, "exons.bed", quote=F, row.names=F, sep="\t")
-```
-
-The exon file needs to be compressed and indexed to calculate in-frame and out-frame InDel statistics.
+Another useful bulk metric is the length of indels in exons because most InDel polymorphisms should be in-frame. If you perform variant calling on a large population cohort with hundreds of samples of different ancestry then [heterozygosity](https://en.wikipedia.org/wiki/Zygosity) is another metric that could be useful. For our single sample case study we move on with a simple threshold based filtering strategy to subset the VCF to exonic variants.
 
 ```shell
-bgzip exons.bed
-tabix -S 1 -s1 -b2 -e3 exons.bed.gz
-bcftools stats -E exons.bed.gz snv.vcf.gz | grep "FS"
+bcftools filter -O z -o exon.vcf.gz -R <(zcat exons.bed.gz) -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz
+bcftools stats exon.vcf.gz | egrep "^SN|TSTV"
 ```
 
-As you can see, we have only one in-frame exonic InDel because our data is downsampled. This metric is most useful for a large population VCF file with hundreds of samples. Similarly, [heterozygosity](https://en.wikipedia.org/wiki/Zygosity) is a useful metric for such population cohorts, which tends to be higher in Africans compared to Europeans or East Asians. In our case we move on with our simple threshold based filtering and subset the VCF to exonic variants.
+[SAMtools](http://www.htslib.org) also includes a basic alignment viewer called tview that is useful to spot-check variants in the raw alignment data. For instance, to view the alignment data for the first two exonic variants:
 
-```shell
-bcftools filter -O z -o exon.vcf.gz -R <(zcat exons.bed.gz | tail -n +2) -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz
-bcftools stats exon.vcf.gz | egrep "SN|TSTV"
+
+```bash
+bcftools view exon.vcf.gz | grep "^#" -A 2
+samtools tview -d t -p chr7:299825 rd.rmdup.bam chr7.fa
 ```
+
 
 ***Exercises***
 
+* Are the first two exonic variants homozygous or heterozygous?
+* What is the genotype and the allelic depth for both variants that FreeBayes emits?
+* Spot-check some heterozygous variants using samtools tview.
 * Plot the InDel length distribution of all called InDels (hint: bcftools stats, IDD tag).
+
+
+
+
+
+
+
+
 

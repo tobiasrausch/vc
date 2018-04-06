@@ -20,10 +20,18 @@ We can now, for instance, extract 50bp from position 10017.
 samtools faidx chr7.fa chr7:10017-10067
 ```
 
+[bedtools](http://bedtools.readthedocs.io/en/latest/) can be used to create a simple BED file with the start and end of each chromosome. We could also use the command makewindows to tile each chromosome into 10kbp windows.
+
+
+```bash
+bedtools makewindows -g <(cut -f 1,2 chr7.fa.fai) -n 1 > chr7.bed
+bedtools nuc -fi chr7.fa -bed chr7.bed
+```
+
 ***Exercises***
 
 * What is the length of chr7?
-* What is the GC-content of chr7? (hint: bedtools nuc)
+* What is the GC-content of chr7?
 * What is the proportion of Ns in chr7?
 
 ## Alignment
@@ -113,11 +121,32 @@ open qc-4.png
 open qc-5.png
 ```
 
-[SAMtools](http://www.htslib.org) also includes a basic alignment viewer called tview that is useful to spot-check variants in the raw alignment data. For instance, to view the alignment data at chr7 and 21560bp:
+For calling exonic variants we are primarily interested in the coverage distribution across exons. We first use R Statistics to download exon coordinates for hg19.
 
+```R
+library(GenomicFeatures)
+db=makeTxDbFromUCSC(genome="hg19", tablename="ccdsGene")
+ex=keepStandardChromosomes(reduce(exons(db), ignore.strand=T))
+df=data.frame(chr=seqnames(ex), start=start(ex), end=end(ex))
+gz = gzfile("exons.bed.gz"), "w")
+write.table(df, gz, quote=F, row.names=F, col.names=F, sep="\t")
+close(gz)
+```
+
+We have to subset this bed file to the subsequence of chr7 that we are using in this practical.
 
 ```bash
-samtools tview -d t -p chr7:21560 rd.rmdup.bam chr7.fa
+bedtools intersect -a <(zcat exons.bed.gz) -b chr7.bed | gzip -c > exons.chr7.bed.gz
+```
+
+With the exonic coordinates, [Alfred](https://github.com/tobiasrausch/alfred) can be used to compute the avg. coverage per target region. In our case the targets are CCDS exons but the same method can be used to compute on-target rates for exome capture data sets.
+
+```bash
+alfred qc -r chr7.fa -b exons.chr7.bed.gz rd.rmdup.bam
+Rscript /opt/alfred/R/stats.R qc.tsv.gz
+convert qc.tsv.gz.pdf qc.png
+# Exon coverage distribution
+open qc-10.png
 ```
 
 
