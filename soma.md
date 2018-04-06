@@ -3,34 +3,31 @@
 As a first step we will compute structural variants using [Delly](https://github.com/tobiasrausch/delly). [Delly](https://www.ncbi.nlm.nih.gov/pubmed/22962449) calls structural variants jointly on the tumor and normal genome and outputs a [BCF](https://samtools.github.io/hts-specs) file, the binary encoding of [VCF](https://samtools.github.io/hts-specs). You can also provide a text file with regions to exclude from the analysis of structural variants. The default exclude map of Delly includes the telomeric and centromeric regions of all human chromosomes since these regions cannot be accurately analyzed with short-read data.
 
 ```shell
-delly call -t DEL -q 20 -g chr2.fa -x hg19.ex -o del.bcf tumor.bam control.bam
-delly call -t DUP -q 20 -g chr2.fa -x hg19.ex -o dup.bcf tumor.bam control.bam
-delly call -t INV -q 20 -g chr2.fa -x hg19.ex -o inv.bcf tumor.bam control.bam
+delly call -q 20 -g chr2.fa -x hg19.ex -o sv.bcf tumor.bam control.bam
 ```
 
 VCF was originally designed for short variants and that's why all SV callers heavily use the INFO fields to encode additional information about the SV such as the structural variant end (INFO:END) and the SV type (INFO:SVTYPE). You can look at the header of the BCF file using grep, '-A 1' includes the first structural variant record in the file:
 
 ```shell
-bcftools view del.bcf | grep "^#" -A 1
+bcftools view sv.bcf | grep "^#" -A 1
 ```
 
 [Delly](https://github.com/tobiasrausch/delly) uses the VCF:INFO fields for structural variant site information, such as how confident the structural variant prediction is and how accurate the breakpoints are. The genotype fields contain the actual sample genotype, its genotype quality and genotype likelihoods and various count fields for the variant and reference supporting reads and spanning pairs. If you browse through the VCF file you will notice that a subset of the Delly structural variant predictions have been refined using split-reads. These precise variants are flagged in the VCF info field with the tag 'PRECISE', all others are listed as 'IMPRECISE'. Please note that this BCF file contains germline and somatic structural variants but also false positives caused by repeat-induced mis-mappings or incomplete reference sequences. [SVprops](https://github.com/tobiasrausch/svprops) is a simple program that converts Delly's BCF output to a tab-delimited SV site list.
 
 ```shell
-svprops del.bcf | head
+svprops sv.bcf | head
 ```
 
 Every record of the BCF file is converted to one tab-delimited row with all kinds of summary statistics. [SVprops](https://github.com/tobiasrausch/svprops) also provides a 'column-view' listing summary statistics for all samples present in the BCF file.
 
 ```shell
-sampleprops del.bcf
+sampleprops sv.bcf
 ```
 
 This initial SV calling cannot differentiate somatic and germline structural variants. For instance, the 2 complex variants we looked at before are still present in the Delly output. A proximal duplication causes 2 paired-end signatures (deletion-type and duplication-type):
 
 ```shell
-bcftools view del.bcf chr2:18905691-18907969 | awk '$2>=18905691 && $2<=18907969'
-bcftools view dup.bcf chr2:18905691-18907969 | awk '$2>=18905691 && $2<=18907969'
+bcftools view sv.bcf chr2:18905691-18907969 | awk '$2>=18905691 && $2<=18907969'
 ```
 
 ***Exercises***
@@ -52,15 +49,7 @@ cat spl.tsv
 There are many parameters available to tune the somatic structural variant filtering. Below we require a minimum variant allele frequency of 25%, no support in the matched normal and an overall confident structural variant site prediction with the VCF filter field being equal to PASS.
 
 ```shell
-delly filter -pt DEL -f somatic -o sdel.bcf -a 0.25 -s spl.tsv del.bcf
-delly filter -pt DUP -f somatic -o sdup.bcf -a 0.25 -s spl.tsv dup.bcf
-delly filter -pt INV -f somatic -o sinv.bcf -a 0.25 -s spl.tsv inv.bcf
-```
-
-Using [BCFtools](http://www.htslib.org) we can merge all somatic structural variants together in a single BCF file.
-
-```shell
-bcftools concat -a -O b -o somatic.bcf sdel.bcf sdup.bcf sinv.bcf
+delly filter -p -f somatic -o somatic.bcf -a 0.25 -s spl.tsv sv.bcf
 sampleprops somatic.bcf
 ```
 
