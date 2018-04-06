@@ -121,7 +121,7 @@ open qc-4.png
 open qc-5.png
 ```
 
-For calling exonic variants we are primarily interested in the coverage distribution across exons. We first use R Statistics to download exon coordinates for hg19.
+For calling exonic variants we are primarily interested in the coverage distribution across exons. We first use [R Statistics](https://www.r-project.org/) to download exon coordinates for hg19.
 
 ```R
 library(GenomicFeatures)

@@ -30,13 +30,13 @@ The [VCF](https://samtools.github.io/hts-specs) format has multiple header lines
 
 You can look at the header of the VCF file using grep, '-A 1' includes the first variant record in the file:
 
-```shell
+```bash
 bcftools view snv.vcf.gz | grep "^#" -A 1
 ```
 
 Using [BCFtools](https://samtools.github.io/bcftools/bcftools.html) we can generate some useful summary statistics such as the [transition/transversion ratio](https://en.wikipedia.org/wiki/Transversion).
 
-```shell
+```bash
 bcftools stats snv.vcf.gz | grep "TSTV"
 ```
 
@@ -51,7 +51,7 @@ bcftools stats snv.vcf.gz | grep "TSTV"
 
 In most applications researchers use external ground truth data to calibrate a variant calling pipeline. In our case we do not know the ground truth so we will illustrate some filtering options based on summary statistics such as the transition/transversion ratio. In most species, transitions are far more likely than transversions and for humans we would expect a transition/transversion ratio of approximately 2.
 
-```shell
+```bash
 bcftools stats snv.vcf.gz | grep "TSTV"
 bcftools filter -i '%QUAL>20' snv.vcf.gz  | bcftools stats | grep "TSTV"
 bcftools filter -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz  | bcftools stats | grep "TSTV"
@@ -59,7 +59,7 @@ bcftools filter -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz  | 
 
 Another useful bulk metric is the length of indels in exons because most InDel polymorphisms should be in-frame. If you perform variant calling on a large population cohort with hundreds of samples of different ancestry then [heterozygosity](https://en.wikipedia.org/wiki/Zygosity) is another metric that could be useful. For our single sample case study we move on with a simple threshold based filtering strategy to subset the VCF to exonic variants.
 
-```shell
+```bash
 bcftools filter -O z -o exon.vcf.gz -R <(zcat exons.bed.gz) -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz
 bcftools stats exon.vcf.gz | egrep "^SN|TSTV"
 ```
