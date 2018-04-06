@@ -128,7 +128,7 @@ library(GenomicFeatures)
 db=makeTxDbFromUCSC(genome="hg19", tablename="ccdsGene")
 ex=keepStandardChromosomes(reduce(exons(db), ignore.strand=T))
 df=data.frame(chr=seqnames(ex), start=start(ex), end=end(ex))
-gz = gzfile("exons.bed.gz"), "w")
+gz = gzfile("exons.bed.gz", "w")
 write.table(df, gz, quote=F, row.names=F, col.names=F, sep="\t")
 close(gz)
 ```

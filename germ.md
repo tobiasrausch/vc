@@ -39,8 +39,8 @@ Without an X11 display we can still use IGV to plot snapshots of the putative SV
 Once IGV is finished we can simply browse these snapshots. Some clear germline deletions are for instance.
 
 ```bash
-open del11.png
-open del13.png
+open DEL11.png
+open DEL13.png
 ```
 
 
