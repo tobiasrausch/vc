@@ -113,6 +113,14 @@ open qc-4.png
 open qc-5.png
 ```
 
+[SAMtools](http://www.htslib.org) also includes a basic alignment viewer called tview that is useful to spot-check variants in the raw alignment data. For instance, to view the alignment data at chr7 and 21560bp:
+
+
+```bash
+samtools tview -d t -p chr7:21560 rd.rmdup.bam chr7.fa
+```
+
+
 
 ***Exercises***
 
