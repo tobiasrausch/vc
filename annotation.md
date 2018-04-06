@@ -59,4 +59,4 @@ samtools tview -d t -p chr7:2954850 rd.rmdup.bam chr7.fa
 * Why did we not select primers more than 1000bp away from the mutation?
 * Is the gene of interest on the forward or reverse strand?
 * Can you spot the mutation in the traces and the alignment against the reference?
-* What is the validated genotype by Sanger sequencing of the mother, father and patient for the given mutation?
+* What is the validated genotype by Sanger sequencing of the mother, father and patient for the mutation?
