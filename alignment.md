@@ -84,27 +84,35 @@ samtools flagstat rd.rmdup.bam
 [Alfred](https://github.com/tobiasrausch/alfred) can be used to compute the insert size distribution, the coverage distribution and alignment error rates.
 
 ```bash
-alfred qc -r chr7.fa -o stats rd.rmdup.bam
-cat stats.metrics.tsv | datamash transpose | column -t
+alfred qc -r chr7.fa rd.rmdup.bam
 ```
 
-All distribution files are simple tab-delimited text files that can be easily visualized in [R](https://www.r-project.org/).
+The output file has multiple sections. Most are data matrices for quality control plots but there is also one section with summary alignment metrics.
 
-
-```R
-library(ggplot2)
-cov=read.table("stats.coverage.tsv", header=T)
-p=ggplot(data=cov, aes(x=Coverage, y=Count))
-p=p + geom_line()
-p=p + coord_cartesian(xlim=c(0,50))
-p
-isize=read.table("stats.isize.tsv", header=T)
-q=ggplot(data=isize, aes(x=InsertSize, y=Count))
-q=q + geom_line(aes(group=Layout, color=Layout))
-q=q + coord_cartesian(xlim=c(0,600))
-q
-quit()
+```bash
+zcat qc.tsv.gz | grep ^ME | datamash transpose | column -t
 ```
+
+To create the QC plots we run the Rscript that is part of [Alfred](https://github.com/tobiasrausch/alfred).
+
+```bash
+Rscript /opt/alfred/R/stats.R qc.tsv.gz
+```
+
+The output PDF file can then be converted to PNGs.
+
+```bash
+convert qc.tsv.gz.pdf qc.png
+# Base content distribution
+open qc-0.png
+# Base quality distribution
+open qc-1.png
+# Coverage
+open qc-4.png
+# Insert size
+open qc-5.png
+```
+
 
 ***Exercises***
 
