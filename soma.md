@@ -127,7 +127,7 @@ Next, we will try to visualize the somatic SV calls on top of the log2 read-dept
 
 ```bash
 svprops somatic.bcf > svs.tsv
-Rscript	rdbaf.R cov.gz svs.tsv
+Rscript rdbaf.R cov.gz svs.tsv
 open cov.png
 ```
 
