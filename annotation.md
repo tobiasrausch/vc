@@ -1,11 +1,14 @@
 ## Variant Annotation
 
-Variant annotation and classification is a challenging process. You can
+Variant annotation and classification is a challenging process.
 
-* use transcript annotations from Ensembl, UCSC or RefSeq
-* there is a long list of mutation prediction tools such as PolyPhen, MutationTaster or Sift
-* you can annotate variants with allele frequency information from variation archives such as dbSNP, ExAC or gnomAD
-* you can check the expression of genes in your studied tissue using GTEx.
+* you can use transcript annotations from Ensembl, UCSC or RefSeq
+* there is a long list of mutation damaging prediction tools such as PolyPhen, MutationTaster or Sift
+* you can annotate variants with allele frequency information from variation archives such as 1000 Genomes, ExAC or gnomAD
+* you can check the expression of genes in your studied tissue using GTEx
+* you can prioritize mutations in genes that interact with known candidate genes of the disease using the [STRING database](https://string-db.org)
+* you can categorize known mutations into benign and pathogenic using ClinVar
+
 
 In the recent years a number of convenient pipelines have been developed that ease the annotation of variants with some of the above information. In this practical we will use [VEP](http://www.ensembl.org/info/docs/tools/vep/index.html) because it can be run directly online. We first dump all SNPs in a VEP compliant format which you can
 then copy and paste into the VEP application. Make sure you use the hg19/GRCh37 version available [here](http://grch37.ensembl.org/Homo_sapiens/Tools/VEP).
@@ -58,5 +61,7 @@ samtools tview -d t -p chr7:2954850 rd.rmdup.bam chr7.fa
 * Why should we not put the primers directly next to the mutation?
 * Why did we not select primers more than 1000bp away from the mutation?
 * Is the gene of interest on the forward or reverse strand?
+* Does the candidate gene make sense for a patient with severe immunodeficiency?
+* Does the candidate gene interact with NFKB1?
 * Can you spot the mutation in the traces and the alignment against the reference?
 * What is the validated genotype by Sanger sequencing of the mother, father and patient for the mutation?
