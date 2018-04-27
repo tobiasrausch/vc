@@ -6,7 +6,7 @@ Variant annotation and classification is a challenging process.
 * there is a long list of mutation damaging prediction tools such as PolyPhen, MutationTaster or Sift
 * you can annotate variants with allele frequency information from variation archives such as 1000 Genomes, ExAC or gnomAD
 * you can check the expression of genes in your studied tissue using GTEx
-* you can prioritize mutations in genes that interact with known candidate genes of the disease using the [STRING database](https://string-db.org)
+* you can prioritize mutations in genes that interact with known candidate genes of the disease
 * you can categorize known mutations into benign and pathogenic using ClinVar
 
 
