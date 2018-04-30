@@ -87,9 +87,9 @@ Without an X11 display we can still use IGV to plot snapshots of the putative SV
 ```bash
 ./runIGVBatch.sh somatic.bp.bed
 # For instance, an inversion (left breakpoint)
-open INV00000243L.png
+open INV00000238L.png
 # and the right breakpoint
-open INV00000243R.png
+open INV00000238R.png
 ```
 
 
