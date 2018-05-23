@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     ant \
     libbz2-dev \
+    liblzma-dev \
     libboost-date-time-dev \
     libboost-program-options-dev \
     libboost-system-dev \
@@ -23,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     python-pip \
     gfortran \
     libncurses-dev \
+    datamash \
     hdf5-tools \
     libhdf5-dev \
     wget \
@@ -33,6 +35,8 @@ RUN apt-get update && apt-get install -y \
     r-base \
     feh \
     firefox \
+    libcurl4-openssl-dev \
+    libxml2-dev \
     libcanberra-gtk-module \
     gthumb \
     xpdf \
@@ -60,6 +64,43 @@ RUN cd /opt \
     && git clone https://github.com/samtools/samtools.git \
     && cd /opt/samtools \
     && make all \
+    && make install
+RUN cd /opt \
+    && wget 'https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2.26.0.tar.gz' \
+    && tar -xzf bedtools-2.26.0.tar.gz \
+    && rm bedtools-2.26.0.tar.gz \
+    && cd bedtools2/ \
+    && make \
+    && make install
+RUN cd /opt \
+    && wget 'https://github.com/lh3/bwa/releases/download/v0.7.16/bwa-0.7.16a.tar.bz2' \
+    && tar -xjf bwa-0.7.16a.tar.bz2 \
+    && rm bwa-0.7.16a.tar.bz2 \
+    && cd bwa-0.7.16a/ \
+    && make \
+    && install -p /opt/bwa-0.7.16a/bwa /usr/local/bin/
+RUN cd /opt \
+    && wget 'https://github.com/gt1/libmaus2/archive/2.0.403-release-20171019153510.tar.gz' \
+    && tar -xzf 2.0.403-release-20171019153510.tar.gz \
+    && rm 2.0.403-release-20171019153510.tar.gz \
+    && cd libmaus2* \
+    && ./configure \
+    && make \
+    && make install
+RUN cd /opt \
+    && wget 'https://github.com/gt1/biobambam2/archive/2.0.79-release-20171006114010.tar.gz' \
+    && tar -xzf 2.0.79-release-20171006114010.tar.gz \
+    && rm 2.0.79-release-20171006114010.tar.gz \
+    && cd biobambam2* \
+    && ./configure \
+    && make \
+    && make install
+RUN cd /opt \
+    && git clone --recursive git://github.com/ekg/freebayes.git \
+    && cd freebayes \
+    && git checkout tags/v1.1.0 \
+    && git submodule update --init --recursive \
+    && make \
     && make install
 RUN cd /opt \
     && git clone https://github.com/tobiasrausch/alfred.git \
