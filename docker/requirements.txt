@@ -7,7 +7,6 @@ decorator
 Flask
 h5py
 html5lib
-imagemagick
 itsdangerous
 Jinja2
 MarkupSafe
@@ -21,4 +20,3 @@ urllib3
 Werkzeug
 wheel
 wsgiref
-xvfb

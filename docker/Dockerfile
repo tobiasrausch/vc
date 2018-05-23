@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     gfortran \
     libncurses-dev \
     datamash \
+    imagemagick \
     hdf5-tools \
     libhdf5-dev \
     wget \
@@ -40,6 +41,8 @@ RUN apt-get update && apt-get install -y \
     libcanberra-gtk-module \
     gthumb \
     xpdf \
+    xvfb \
+    pkg-config \
     && apt-get clean
 
 # set environment
