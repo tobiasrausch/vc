@@ -141,14 +141,9 @@ RUN mkdir -p /data && chmod a+rwx /data
 # add user
 RUN groupadd -r -g 1000 ubuntu && useradd -r -g ubuntu -u 1000 -m ubuntu
 USER ubuntu
-RUN cd /data \
-    && wget ftp://ftp-exchange.embl-heidelberg.de/pub/exchange/rausch/outgoing/rd.tar.gz \
-    && tar -xzf rd.tar.gz \
-    && rm rd.tar.gz
-RUN cd /data \
-    && wget ftp://ftp-exchange.embl-heidelberg.de/pub/exchange/rausch/outgoing/sv.tar.gz \
-    && tar -xzf sv.tar.gz \
-    && rm sv.tar.gz
+
+# copy data as local user to /data directory
+# docker run -i -t -v /opt/dev/variant-calling/data/:/data/tmp variant-calling /bin/bash
 
 # by default /bin/bash is executed
 CMD ["/bin/bash"]
