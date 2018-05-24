@@ -1,21 +1,12 @@
 ## Germline Deletions
 
-To get an idea of how structural variants (SVs) look like in short read, next-generation sequencing data let's download the [1000 Genomes SV polymorphism catalogue](https://www.ncbi.nlm.nih.gov/pubmed/26432246).
+To get an idea of how structural variants (SVs) look like in short read, next-generation sequencing data one can use the [1000 Genomes SV polymorphism catalogue](https://www.ncbi.nlm.nih.gov/pubmed/26432246) because these are germline SVs and a subset of those will be present in our sample. To increase the chance that our sample of interest is a carrier of one of these germline SVs I have already subsetted the SV list to common SVs with a population allele frequency above 80% on chr2. The below [BED](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) file shows a couple of germline SVs.
 
 ```bash
-cd /data/sv/
-wget 'ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/integrated_sv_map/ALL.wgs.mergedSV.v8.20130502.svs.genotypes.vcf.gz'
-wget 'ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/integrated_sv_map/ALL.wgs.mergedSV.v8.20130502.svs.genotypes.vcf.gz.tbi'
+cat svs.bed
 ```
 
-To increase the chance that our sample of interest is a carrier of one of these germline SVs we will subset to common SVs with a population allele frequency above 80% on chr2.
-
-```bash
-bcftools view ALL.wgs.mergedSV.v8.20130502.svs.genotypes.vcf.gz 2 | bcftools filter -O z -o common.vcf.gz -i 'EUR_AF>=0.8' -
-svprops common.vcf.gz  | tail -n +2 | cut -f 1,2,4 | awk '{print $0"\tDEL"NR;}' > svs.bed
-```
-
-Using [IGV](http://software.broadinstitute.org/software/igv/) we can then browse the SVs interactively if an X11 display is available. If you only have a terminal we can still use IGV in batch mode and create snapshots of the putative SV loci.
+Using [IGV](http://software.broadinstitute.org/software/igv/) we can then browse these SVs interactively if an X11 display is available. If you only have a terminal we can still use IGV in batch mode and create snapshots of the putative SV loci.
 
 ## Interactive IGV 
 
