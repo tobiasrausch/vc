@@ -54,13 +54,13 @@ In most applications researchers use external ground truth data to calibrate a v
 ```bash
 bcftools stats snv.vcf.gz | grep "TSTV"
 bcftools filter -i '%QUAL>20' snv.vcf.gz  | bcftools stats | grep "TSTV"
-bcftools filter -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz  | bcftools stats | grep "TSTV"
+bcftools filter -e '%QUAL<=20 || %QUAL/INFO/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz  | bcftools stats | grep "TSTV"
 ```
 
 Another useful bulk metric is the length of indels in exons because most InDel polymorphisms should be in-frame. If you perform variant calling on a large population cohort with hundreds of samples of different ancestry then [heterozygosity](https://en.wikipedia.org/wiki/Zygosity) is another metric that could be useful. For our single sample case study we move on with a simple threshold based filtering strategy to subset the VCF to exonic variants.
 
 ```bash
-bcftools filter -O z -o exon.vcf.gz -R <(zcat exons.bed.gz) -e '%QUAL<=20 || %QUAL/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz
+bcftools filter -O z -o exon.vcf.gz -R <(zcat exons.bed.gz) -e '%QUAL<=20 || %QUAL/INFO/AO<=2 || SAF<=2 || SAR<=2' snv.vcf.gz
 bcftools stats exon.vcf.gz | egrep "^SN|TSTV"
 ```
 

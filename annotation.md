@@ -32,16 +32,11 @@ bcftools query -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t[%GT]\n" exon.vcf.gz
 
 ## Variant Validation
 
-Once a putative causative variant has been identified these are usually validated in the index patient using PCR and Sanger sequencing. If a specific inheritance model is suspected the parents are also tested. For the likely causative variant we will design primers using [Primer3Plus](https://www.ncbi.nlm.nih.gov/pubmed/17485472) available on [gear.embl.de](https://gear.embl.de). We will first select a left primer in the preceeding sequence of the mutation and then a right primer in the suceeding sequence. Don't forget to use hg19/GRChr37 as the reference genome.
+Once a putative causative variant has been identified these are usually validated in the index patient using PCR and Sanger sequencing. If a specific inheritance model is suspected the parents are also tested. For the likely causative variant we will design primers using [Primer3Plus](https://www.ncbi.nlm.nih.gov/pubmed/17485472). These primers are locally unique and have the appropriate Tm but they are not necessarily unique in the entire genome. We can use [Silica](https://gear.embl.de/silica), a tool for [In-silico PCR](https://en.wikipedia.org/wiki/In_silico_PCR), to check genome-wide uniqueness. Both methods, Primer3Plus and Silica, are combined in [Verdin](https://gear.embl.de/verdin) to automatically design primers for short variants and large structural variants. The example shows how SNVs, InDels and SVs are encoded and then you can design primers for the likely causative SNV. We do not have the time to run the actual PCR experiment and sequence the breakpoint mutation but the Sanger validation files of the original study are in the data folder.
 
 ```bash
-samtools faidx chr7.fa chr7:2954300-2954850
-samtools faidx chr7.fa chr7:2954900-2955450
+ls *.ab1
 ```
-
-The primers are locally unique and have the appropriate Tm but they are not necessarily unique in the entire genome. We can use [Silica](https://gear.embl.de/silica), a tool for [In-silico PCR](https://en.wikipedia.org/wiki/In_silico_PCR), to check genome-wide uniqueness. Try different combinations of left and right primers and possibly change parameters in Primer3Plus to generate further candidates until you found a good pair of primers to validate the mutation.
-
-We do not have the time to run the PCR experiment and sequence the breakpoint mutation but the Sanger validation files of the original study are in the data folder.
 
 You can analyze these trace files using [Indigo](https://gear.embl.de/indigo). Indigo is primarily for discovering InDels in Sanger traces but it also aligns the trace file to the reference genome so we can use it to compare the alignments and traces of the index patient to her parents. The files are patient.ab1, mother.ab1 and father.ab1. For your convenience, a screenshot of the sanger traces is provided in sanger.png.
 

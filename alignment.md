@@ -121,22 +121,12 @@ open qc-4.png
 open qc-5.png
 ```
 
-For calling exonic variants we are primarily interested in the coverage distribution across exons. We first use [R Statistics](https://www.r-project.org/) to download exon coordinates for hg19.
-
-```R
-library(GenomicFeatures)
-db=makeTxDbFromUCSC(genome="hg19", tablename="ccdsGene")
-ex=keepStandardChromosomes(reduce(exons(db), ignore.strand=T))
-df=data.frame(chr=seqnames(ex), start=start(ex), end=end(ex))
-gz = gzfile("exons.bed.gz", "w")
-write.table(df, gz, quote=F, row.names=F, col.names=F, sep="\t")
-close(gz)
-```
-
-We have to subset this bed file to the subsequence of chr7 that we are using in this practical.
+For calling exonic variants we are primarily interested in the coverage distribution across exons. One could, for instance, use [R Statistics](https://www.r-project.org/) to download exon coordinates for hg19 or download coding regions from UCSC or Ensembl. The file exons.bed.gz contains CCDS coding regions for hg19. We have to subset this bed file to the subsequence of chr7 that we are using in this practical.
 
 ```bash
+zcat exons.bed.gz | head
 bedtools intersect -a <(zcat exons.bed.gz) -b chr7.bed | gzip -c > exons.chr7.bed.gz
+zcat exons.chr7.bed.gz | head
 ```
 
 With the exonic coordinates, [Alfred](https://github.com/tobiasrausch/alfred) can be used to compute the avg. coverage per target region. In our case the targets are CCDS exons but the same method can be used to compute on-target rates for exome capture data sets.

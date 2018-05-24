@@ -135,12 +135,19 @@ RUN pip install -r /opt/variant-calling/docker/requirements.txt
 # install bioconductor packages
 RUN Rscript /opt/variant-calling/docker/pkginstall.R
 
+# ldconfig
+RUN ldconfig
+
 # Create data directory
 RUN mkdir -p /data && chmod a+rwx /data
 
 # add user
 RUN groupadd -r -g 1000 ubuntu && useradd -r -g ubuntu -u 1000 -m ubuntu
 USER ubuntu
+
+# Set user environment
+ENV LD_LIBRARY_PATH /usr/local/lib
+RUN echo alias open=feh >> ~/.bashrc
 
 # copy data as local user to /data directory
 # docker run -i -t -v /opt/dev/variant-calling/data/:/data/tmp variant-calling /bin/bash
