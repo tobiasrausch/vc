@@ -1,8 +1,9 @@
 ## Germline Deletions
 
-To get an idea of how structural variants (SVs) look like in short read, next-generation sequencing data one can use the [1000 Genomes SV polymorphism catalogue](https://www.ncbi.nlm.nih.gov/pubmed/26432246) because these are germline SVs and a subset of those will be present in our sample. To increase the chance that our sample of interest is a carrier of one of these germline SVs I have already subsetted the SV list to common SVs with a population allele frequency above 80% on chr2. The below [BED](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) file shows a couple of germline SVs.
+To get an idea of how structural variants (SVs) look like in short read, next-generation sequencing data one can use the [1000 Genomes SV polymorphism catalogue](https://www.ncbi.nlm.nih.gov/pubmed/26432246) because these are germline SVs and a subset of those will be present in our sample. To increase the chance that our sample of interest is a carrier of one of these germline SVs I have already subsetted the SV list to common SVs with a population allele frequency above 50% on chr2. The below [BED](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) file shows a couple of germline SVs.
 
 ```bash
+cd /data/sv/
 cat svs.bed
 ```
 
@@ -45,12 +46,21 @@ open complex1.png
 open complex2.png
 ```
 
-As part of the SV consortium we validated the above complex SVs using PacBio. The reads are in a separate FASTA file called pacbio.sv1.fa and pacbio.sv2.fa. Please align the above genomic reference subsequences against these PacBio reads using [Maze](https://gear.embl.de/maze/) available on [gear.embl.de](https://gear.embl.de). You can, of course, also pick a slightly smaller/larger reference genomic subsequence to align the full PacBio read.
+As part of the SV consortium we validated the above complex SVs using PacBio. The reads are in a separate FASTA file called pacbio.sv1.fa and pacbio.sv2.fa. We need the subsequence of the reference to create a pairwise dotplot of the PacBio read against the reference. [SAMtools](http://www.htslib.org) is a convenient tool to extract such subsequences of a FASTA file.
+
+```bash
+cat complex.bed
+samtools faidx chr2.fa chr2:18905691-18907969
+samtools faidx chr2.fa chr2:96210505-96212783
+```
+
+
+Please align the above genomic reference subsequences against the respective PacBio read using [Maze](https://gear.embl.de/maze/) available on [gear.embl.de](https://gear.embl.de). 
 
 ***Exercises***
 
-* What kind of SV is happening in the region chr2:18905691-18907969 ?
-* What kind of SV is happening in the region chr2:96210505-96212783 ?
+* What kind of SV is present in the region chr2:18905691-18907969 ?
+* What kind of SV is present in the region chr2:96210505-96212783 ?
 
 
 ## Structural Variant Alignment QC
