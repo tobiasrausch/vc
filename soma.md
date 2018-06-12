@@ -7,7 +7,7 @@ cd /data/sv
 delly call -n -q 20 -g chr2.fa -x hg19.ex -o sv.bcf tumor.bam control.bam
 ```
 
-VCF was originally designed for short variants and that's why all SV callers heavily use the INFO fields to encode additional information about the SV such as the structural variant end (INFO:END) and the SV type (INFO:SVTYPE). You can look at the header of the BCF file using grep, '-A 1' includes the first structural variant record in the file:
+VCF was originally designed for short variants and that's why all SV callers heavily use the INFO fields to encode additional information about the SV such as the structural variant end (INFO:END) and the SV type (INFO:SVTYPE). You can look at the header of the BCF file using grep, '-A 2' includes the first two structural variant records in the file:
 
 ```bash
 bcftools view sv.bcf | grep "^#" -A 2
