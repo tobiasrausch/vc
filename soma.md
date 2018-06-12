@@ -36,7 +36,7 @@ bcftools view sv.bcf chr2:18905691-18907969 | awk '$2>=18905691 && $2<=18907969'
 * What is the fraction of deletions that has been called precisely (at single nucleotide resolution) by Delly?
 * Is the germline inverted duplication present in Delly's output files?
 * What type of SVs delineate a proximal inverted duplication?
-* [Blat](https://genome.ucsc.edu/cgi-bin/hgBlat) the consensus sequence of the first precise deletion (bcftools view sv.bcf | grep "SVTYPE=DEL" | head -n 1). Is it a known variant?
+* Some of the SVs have nucleotide resolution and the alternative haplotype is present in INFO:CONSENSUS. [Blat](https://genome.ucsc.edu/cgi-bin/hgBlat) the consensus sequence of some of these deletions. What genomic element has been deleted for DEL00001919 (bcftools view sv.bcf | grep "DEL00001919")? Is it a known variant?
 
 
 ## Somatic Filtering
