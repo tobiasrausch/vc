@@ -111,6 +111,11 @@ RUN cd /opt \
     && make all \
     && make install
 RUN cd /opt \
+    && git clone https://github.com/tobiasrausch/coral.git \
+    && cd /opt/coral/ \
+    && make all \
+    && make install
+RUN cd /opt \
     && git clone https://github.com/dellytools/delly.git \
     && cd /opt/delly/ \
     && make all \
