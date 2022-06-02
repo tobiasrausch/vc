@@ -121,21 +121,10 @@ bcftools view sv.bcf | grep "^#" -A 2
 bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID[\t%GT]\n" sv.bcf | head
 ```
 
-This initial SV calling cannot differentiate somatic and germline structural variants. For instance, the 2 complex variants we looked at before are still present in the Delly output. A proximal duplication causes 2 paired-end signatures (deletion-type and duplication-type):
+This initial SV calling cannot differentiate somatic and germline structural variants. For instance, the 2 complex variants we looked at before are still present in the delly output. A proximal duplication causes 2 paired-end signatures (deletion-type and duplication-type):
 
 ```bash
 bcftools view sv.bcf chr2:18905691-18907969 | awk '$2>=18905691 && $2<=18907969'
-```
-
-#### Aligning locally assembled contigs
-
-Delly locally assembles SV-supporting reads into contigs. You can align these consensus sequences back to the reference using [minimap2](https://github.com/lh3/minimap2), for instance:
-
-```bash
-bcftools query -f "%CHROM\t%POS\t%ID\t%INFO/CONSENSUS\n" sv.bcf | grep "2292643" | awk '{print ">del\n"$4;}' >del.fa
-minimap2 -aLx splice chr2.fa del.fa | samtools sort -o align.bam
-samtools view align.bam
-wally matches -r del -o del.png -g chr2.fa align.bam
 ```
 
 #### Exercises
