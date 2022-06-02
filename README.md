@@ -167,7 +167,22 @@ bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID\n" somatic.bcf | awk '$3-$2>1000
 wally region -R somatic.bp.bed -s 2 -cp -g chr2.fa tumor.bam control.bam
 ```
 
-### Visualization of a chromothripsis event
+### Copy-number segmentation
+
+To reveal copy-number gains and losses we can use delly's cnv mode. For a simple read-depth plot we can use:
+
+```bash
+delly cnv -u -z 10000 -o cnv.bcf -c cnv.cov.gz -g chr2.fa -m chr2.map.fa tumor.bam 
+Rscript cnBafSV.R cnv.cov.gz
+```
+
+We can also overlay the copy-number segmentation using
+
+```bash
+bcftools query -s tumor -f "%CHROM\t%POS\t%INFO/END\t%ID\t[%RDCN]\n" cnv.bcf > segmentation.bed
+Rscript cnBafSV.R cnv.cov.gz segmentation.bed
+```
+
 
 To reveal any higher-order SV class such as chromothripsis we need to integrate read-depth with structural variant predictions and visualize the B-allele frequency of germline SNPs to highlight loss-of-heterozygosity (LOH) events.
 
