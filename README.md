@@ -72,7 +72,7 @@ wally region -R svs.bed -cp -g chr2.fa tumor.bam control.bam
 
 ### Complex structural variants
 
-Even in germline genomes we can observe complex SVs and three example regions are in the `svs.bed` file.
+Even in germline genomes we can observe complex SVs and two example regions are in the `svs.bed` file.
 
 ```bash
 cat svs.bed | grep "complex"
