@@ -28,12 +28,7 @@ alfred qc -r chr2.fa -o qc.tsv.gz -j qc.json.gz tumor.bam
 zcat qc.tsv.gz | grep ^ME | datamash transpose | column -t
 ```
 
-Instead of parsing the tab-delimited file, you can also upload the JSON file to the [Alfred web interface](https://gear.embl.de/alfred/).
-
-```bash
-ls qc.json.gz
-firefox https://gear.embl.de/alfred
-```
+Instead of parsing the tab-delimited file, you can also upload the JSON file `qc.json.gz` to the [Alfred web interface](https://www.gear-genomics.com/alfred/).
 
 As you can see in the QC results, I heavily downsampled the data to 7x coverage to speed-up all analyses but this implies that some SVs will have low support. Regarding the QC interpretation, there are some general things to watch out for such as mapping percentages below 70%, >20% duplicates or multiple peaks in the insert size distribution. Be aware that many alignment statistics vary largely by protocol and hence, it's usually best to compare multiple different sequencing runs using the same protocol (DNA-seq, RNA-seq, ChIP-seq, paired-end, single-end or mate-pair) against each other, which then highlights the outliers.
 
@@ -74,7 +69,7 @@ head pacbio.sv2.fa
 samtools faidx chr2.fa chr2:96210505-96212783
 ```
 
-Please align the above genomic reference subsequences against the respective PacBio read using [Maze](https://gear.embl.de/maze/) available on [gear.embl.de](https://gear.embl.de). 
+Please align the above genomic reference subsequences against the respective PacBio read using [Maze](https://www.gear-genomics.com/alfred/) available on [gear-genomics.com](https://www.gear-genomics.com/). 
 
 ***Exercises***
 
