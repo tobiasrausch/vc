@@ -1,5 +1,7 @@
+.check
+.conda
+.mamba
+.tools
+conda/
 data/
 *~
-node_modules/
-package-lock.json
-docs/.vuepress/dist/
