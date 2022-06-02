@@ -13,7 +13,7 @@ all: ${TARGETS}
 	export PATH=${PBASE}/conda/bin:${PATH} && conda install -y -n base -c conda-forge mamba && touch .mamba
 
 .tools: .conda .mamba
-	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda samtools bcftools bedtools htslib bwa delly alfred freebayes igv && touch .tools
+	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda datamash samtools bcftools bedtools htslib bwa delly alfred freebayes igv && touch .tools
 
 .rstats: .conda .mamba .tools
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda bioconductor-genomicfeatures r-ggplot2 r-reshape2 bioconductor-dnacopy && touch .rstats
