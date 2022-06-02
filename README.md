@@ -15,11 +15,13 @@ source activate base
 
 ### Discovery of chromothripsis in a cancer sample
 
-In this practical we will analyze germline and somatic structural variants (SVs) of a Chromothripsis sample from this [study](https://www.ncbi.nlm.nih.gov/pubmed/22265402). The anonomyzed data has been filtered for chr2 only to speed up all analyses hereafter. The alignment file of the tumor genome is called `tumor.bam` and the alignment file of the control genome is called `control.bam`.
+In this practical we will analyze germline and somatic structural variants (SVs) of a chromothripsis sample from a recent [cancer study](https://www.ncbi.nlm.nih.gov/pubmed/22265402). The anonymized data was filtered for chr2 to speed up all subsequent analysis. The tumor genome alignment file is named `tumor.bam` and the control genome alignment file is named `control.bam`.
 
-## Structural Variant Alignment QC
+### Structural variant alignment quality control
 
-Paired-end methods can be affected by a skewed insert size distribution, read-depth methods by non-uniform coverage and split-read methods suffer from high sequencing error rates that cause mis-mappings. Prior to any structural variant discovery you should therefore evaluate the quality of the data such as the percentage of mapped reads, singletons, duplicates, properly paired reads and the insert size & coverage distributions. [Picard](http://broadinstitute.github.io/picard/), [SAMtools](http://www.htslib.org), [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [Alfred](https://github.com/tobiasrausch/alfred) compute some of these alignment statistics as shown below for the tumor sample.
+Before each discovery of structural variants, you should assess the quality of the data,
+as, for example, paired-end methods are hampered by skewed insert size distributions, read-depth methods by uneven coverage, and split-read methods by high sequencing error rates. Common quality criteria are e.g. the percentage of reads mapped, number of singletons and duplicates, number of properly paired reads and the shape of the insert size and coverage distributions. 
+[Picard](http://broadinstitute.github.io/picard/), [SAMtools](http://www.htslib.org), [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [Alfred](https://github.com/tobiasrausch/alfred) are commonly used quality control tools that compute some of these alignment statistics as shown below for the tumor sample.
 
 ```bash
 cd data/sv/
@@ -28,17 +30,19 @@ alfred qc -r chr2.fa -o qc.tsv.gz -j qc.json.gz tumor.bam
 zcat qc.tsv.gz | grep ^ME | datamash transpose | column -t
 ```
 
-Instead of parsing the tab-delimited file, you can also upload the JSON file `qc.json.gz` to the [Alfred web interface](https://www.gear-genomics.com/alfred/).
+Instead of parsing the tab-delimited file, you can also upload the JSON file `qc.json.gz` to the [Alfred web application](https://www.gear-genomics.com/alfred/).
 
-As you can see in the QC results, I heavily downsampled the data to 7x coverage to speed-up all analyses but this implies that some SVs will have low support. Regarding the QC interpretation, there are some general things to watch out for such as mapping percentages below 70%, >20% duplicates or multiple peaks in the insert size distribution. Be aware that many alignment statistics vary largely by protocol and hence, it's usually best to compare multiple different sequencing runs using the same protocol (DNA-seq, RNA-seq, ChIP-seq, paired-end, single-end or mate-pair) against each other, which then highlights the outliers.
 
-***Exercises***
+As you can see from the QC results, the data has been downsampled to 7x coverage to speed up all analyses.
+This implies that some SVs will have only weak support due to low coverage. In terms of QC interpretation, there are some general things to look out for, such as mapping percentages below 70%, >20% duplicates, or multiple peaks in the insert size distribution. Notice that many alignment statistics vary greatly depending on the protocol used, so it's usually best to compare several different sequencing runs from the same protocol (DNA-seq, RNA-seq, ChIP-seq, paired-end, single-end, or mate-pair) to highlight outliers.
+ 
+#### Exercises
 
 * What is the median coverage of the data set?
 * Given the insert size distribution, what would be a suitable cutoff to define deletion supporting paired-ends?
 
 
-## Germline Structural Variants
+### Germline Structural Variants
 
 Before diving into SV calling, let's get an idea of how structural variants (SVs) look like in short read, next-generation sequencing data. I have prepared a simple [BED](https://bedtools.readthedocs.io/) file with some "simple" germline structural variants such as deletions and some more complex examples.
 
