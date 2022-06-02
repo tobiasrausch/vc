@@ -15,7 +15,13 @@ all: ${TARGETS}
 .tools: .conda .mamba
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda samtools bcftools bedtools htslib bwa delly alfred freebayes && touch .tools
 
-.check: .conda .mamba .tools
+.rstats: .conda .mamba .tools
+	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda bioconductor-genomicfeatures bioconductor-ggplot2 bioconductor-reshape2 bioconductor-dnacopy && touch .rstats
+
+.pcks: .conda .mamba .tools .rstats
+	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda cyvcf2 numpy pysam && touch .pcks
+
+.check: .conda .mamba .tools .rstats .pcks
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && delly --version && touch .check
 
 clean:
