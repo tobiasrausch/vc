@@ -6,8 +6,10 @@
 
 ## Load the conda environment with all required tools
 
-`export PATH=`pwd`/conda/bin:${PATH}`
-`source activate base`
+```bash
+export PATH=`pwd`/conda/bin:${PATH}
+source activate base
+```
 
 ## SNV Calling
 
