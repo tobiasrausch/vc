@@ -93,7 +93,7 @@ Please align the above genomic reference subsequences `sv1.fa` and `sv2.fa` agai
 * What kind of SV is present in the region chr2:96210505-96212783 ?
 
 
-### Somatic structural variant calling
+### Delly structural variant calling
 
 [Delly](https://github.com/dellytools/delly) is a method for detecting structural variants. 
 Using the tumor and normal genome alignment, delly calculates structural variants and outputs them as a BCF file, the binary encoding of [VCF](https://samtools.github.io/hts-specs).
@@ -111,16 +111,14 @@ VCF was originally designed for short variants and that's why all SV callers hea
 bcftools view sv.bcf | grep "^#" -A 2
 ```
 
-[Delly](https://github.com/dellytools/delly) uses the VCF:INFO fields for structural variant site information, such as how confident the structural variant prediction is and how accurate the breakpoints are. The genotype fields contain the actual sample genotype, its genotype quality and genotype likelihoods and various count fields for the variant and reference supporting reads and spanning pairs. If you browse through the VCF file you will notice that a subset of the Delly structural variant predictions have been refined using split-reads. These precise variants are flagged in the VCF info field with the tag 'PRECISE', all others are listed as 'IMPRECISE'. Please note that this BCF file contains germline and somatic structural variants but also false positives caused by repeat-induced mis-mappings or incomplete reference sequences. [SVprops](https://github.com/dellytools/svprops) is a simple program that converts Delly's BCF output to a tab-delimited SV site list.
+[Delly](https://github.com/dellytools/delly) uses the VCF:INFO fields for structural variant site information, such as how confident the structural variant prediction is and how accurate the breakpoints are. The genotype fields contain the actual sample genotype, its genotype quality and genotype likelihoods and various count fields for the variant and reference supporting reads and spanning pairs. If you browse through the VCF file you will notice that a subset of the Delly structural variant predictions have been refined using split-reads. These precise variants are flagged in the VCF info field with the tag 'PRECISE', all others are listed as 'IMPRECISE'. Please note that this BCF file contains germline and somatic structural variants but also false positives caused by repeat-induced mis-mappings or incomplete reference sequences.
+
+#### Querying VCF files
+
+[Bcftools](https://github.com/samtools/bcftools) offers many possibilities to query and reformat SV calls. For instance, to output a table with the chromosome, start, end, identifier and genotype of each SV we can use:
 
 ```bash
-svprops sv.bcf | head
-```
-
-Every record of the BCF file is converted to one tab-delimited row with all kinds of summary statistics. [SVprops](https://github.com/dellytools/svprops) also provides a 'column-view' listing summary statistics for all samples present in the BCF file.
-
-```bash
-sampleprops sv.bcf
+bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID[\t%GT]\n" sv.bcf | head
 ```
 
 This initial SV calling cannot differentiate somatic and germline structural variants. For instance, the 2 complex variants we looked at before are still present in the Delly output. A proximal duplication causes 2 paired-end signatures (deletion-type and duplication-type):
@@ -129,17 +127,25 @@ This initial SV calling cannot differentiate somatic and germline structural var
 bcftools view sv.bcf chr2:18905691-18907969 | awk '$2>=18905691 && $2<=18907969'
 ```
 
-***Exercises***
+#### Aligning locally assembled contigs
+
+Delly locally assembles SV-supporting reads into contigs. You can align these consensus sequences back to the reference using [minimap2](https://github.com/lh3/minimap2), for instance:
+
+```bash
+bcftools query -f "%CHROM\t%POS\t%ID\t%INFO/CONSENSUS\n" sv.bcf | grep "2292643" | awk '{print ">del\n"$4;}' >del.fa
+minimap2 -aLx splice chr2.fa del.fa | samtools sort -o align.bam
+samtools view align.bam
+wally matches -r del -o del.png -g chr2.fa align.bam
+```
+
+#### Exercises
 
 * What is the fraction of deletions that has been called precisely (at single nucleotide resolution) by Delly?
-* Is the germline inverted duplication present in Delly's output files?
-* What type of SVs delineate a proximal inverted duplication?
-* Some of the SVs have nucleotide resolution and the alternative haplotype is present in INFO:CONSENSUS. [Blat](https://genome.ucsc.edu/cgi-bin/hgBlat) the consensus sequence of some of these deletions. What genomic element has been deleted for DEL00001919 (bcftools view sv.bcf | grep "DEL00001919")? Is it a known variant?
+* Is the other complex structural variant still present in Delly's output file?
 
+### Somatic structural variant filtering
 
-## Somatic Filtering
-
-Delly ships with a basic somatic filtering subcommand that uses the matched control and possibly additional control samples from unrelated individuals. The somatic filtering requires a sample file listing tumor and control sample names from the VCF file.
+Delly's somatic filtering requires a sample file listing tumor and control sample names from the VCF file.
 
 ```bash
 cat spl.tsv
@@ -149,37 +155,32 @@ There are many parameters available to tune the somatic structural variant filte
 
 ```bash
 delly filter -p -f somatic -o somatic.bcf -a 0.25 -s spl.tsv sv.bcf
-sampleprops somatic.bcf
 ```
 
-***Exercises***
+As expected, the somatic SVs have a homozygous reference genotype in the control sample.
+
+```bash
+bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID[\t%GT]\n" somatic.bcf
+```
+
+#### Exercises
 
 * What is the average size of the somatic SVs?
 * Is there any SV type that is enriched among the somatic SVs?
 
 
-## Structural Variant Visualization using IGV
+### Complex structural variant visualization
 
-IGV is excellent for inspecting small variants but for these long-range complex re-arrangements its less powerful. You cannot view the entire event in IGV but you can still visualize the breakpoint regions separately, denoted as left breakpoint (L) and right breakpoint (R) below.
-
-```bash
-svprops somatic.bcf | tail -n +2 | awk '{print $1"\t"($2-500)"\t"($2+500)"\t"$5"L";}' > somatic.bp.bed
-svprops somatic.bcf | tail -n +2 | awk '{print $3"\t"($4-500)"\t"($4+500)"\t"$5"R";}' >> somatic.bp.bed
-sort -k4,4 somatic.bp.bed
-```
-
-We can then use [IGV](http://software.broadinstitute.org/software/igv/) to browse the variants interactively using the chr2 reference sequence.
+IGV and [wally](https://github.com/tobiasrausch/wally) support so-called split views to visualize the breakpoints of long-range SVs greater than 10,000kbp.
 
 ```bash
-./igv.sh -g chr2.fa
+bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID\n" somatic.bcf | awk '$3-$2>10000 {print $1"\t"($2-500)"\t"($2+500)"\t"$4"L\n"$1"\t"($3-500)"\t"($3+500)"\t"$4"R";}' > somatic.bp.bed
+wally region -R somatic.bp.bed -s 2 -cp -g chr2.fa tumor.bam control.bam
 ```
 
-As previously, once IGV has started use 'File' and 'Load from File' to load the tumor and normal bam alignment file. Then import 'somatic.bp.bed' from your working directory using 'Regions' and 'Import Regions'. The somatic structural variants can then be browsed easily using 'Regions' and 'Region Navigator' and you probably want to switch on 'View as pairs' and 'Color alignments by pair orientation'. You may also want to play around with the split screen view, where you can right click a read and select 'View mate region in split screen'.
+### Visualization of a chromothripsis event
 
-
-## Visualizing Complex Rearrangements
-
-To reveal any complex re-arrangement patterns it's worthwhile to create a read-depth plot, overlay the long-range structural variants and visualize the B-allele frequency of germline SNPs to highlight loss-of-heterozygosity (LOH) events.
+To reveal any higher-order SV class such as chromothripsis we need to integrate read-depth with structural variant predictions and visualize the B-allele frequency of germline SNPs to highlight loss-of-heterozygosity (LOH) events.
 
 ```bash
 coral call -m chr2.map.fa -g chr2.fa -v chr2.snps.bcf -l control.bam -s id -o out tumor.bam
