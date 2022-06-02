@@ -2,6 +2,8 @@
 .conda
 .mamba
 .tools
+.pcks
+.rstats
 conda/
 data/
 *~
