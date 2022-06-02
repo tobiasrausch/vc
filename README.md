@@ -44,19 +44,23 @@ This implies that some SVs will have only weak support due to low coverage. In t
 
 ### Germline Structural Variants
 
-Before diving into SV calling, let's get an idea of how structural variants (SVs) look like in short read, next-generation sequencing data. I have prepared a simple [BED](https://bedtools.readthedocs.io/) file with some "simple" germline structural variants such as deletions and some more complex examples.
+Before we dive into SV calling, let's get an idea of what structural variants (SVs) look like in short-read sequencing data. For this I have prepared a [BED file](https://bedtools.readthedocs.io/) with some "simple" germline structure variants like deletions and some more complex examples.
 
 ```bash
 cat svs.bed
 ```
 
-Using [IGV](http://software.broadinstitute.org/software/igv/) we can then browse these SVs interactively.
+Using [IGV](http://software.broadinstitute.org/software/igv/) we can browse these SVs interactively.
 
 ```bash
-./igv.sh -g chr2.fa
+igv -g chr2.fa
 ```
 
-Once IGV has started use 'File' and 'Load from File' to load the `tumor.bam` and `control.bam` alignment file. Then import the file `svs.bed` from your working directory using 'Regions' and 'Import Regions'. The structural variants can then be browsed easily using 'Regions' and 'Region Navigator'. Select a structural variant in the Region Navigator and click 'View', which will center the IGV alignment view on the selected structural variant. It's usually best to zoom out once then by clicking on the '-' sign in the toolbar at the top, so you can view all supporting abnormal paired-ends. To highlight the abnormal paired-ends please right click in IGV on the BAM file and activate 'View as pairs'. In the same menu, please open 'Color alignments by' and then switch to "pair orientation' for inversions and duplications. For deletions, you want to color the alignments by "insert size". 
+Once IGV has started use 'File' and 'Load from File' to load the `tumor.bam` and `control.bam` alignment file. Then import the `svs.bed` file from your working directory using 'Regions' and 'Import Regions'.
+You can then easily navigate to the structural variants with 'Regions' and 'Region Navigator'.
+Select a structural vaariant in the region navigator and click 'View', which will center the IGV alignment view on the selected structural variant.
+You can zoom in and out using the '+' and '-' signs in the toolbar at the top.
+To highlight the abnormal paired-ends please right click in IGV on the BAM file and activate 'View as pairs'. In the same menu, please open 'Color alignments by' and then switch to "pair orientation' for inversions and duplications. For deletions, you want to color the alignments by "insert size". 
 
 Most [1000 Genomes SVs](https://www.nature.com/articles/nature15394) are deletions because these are easier to detect in low coverage sequencing data. Deletions cause a drop in read-depth and can be detected by spanning paired-ends of abnormally large insert size. In addition, split-reads have a prefix alignment before the deletion and a suffix alignment after the deletion. Other SV types such as inversions are much harder to detect because these are balanced rearrangements that do not cause a read-depth change. Besides the simple SV types (deletions, duplications, inversions) one can also find more complex SVs in the germline. Three example regions for that are in the `svs.bed` file.
 
