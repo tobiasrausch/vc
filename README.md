@@ -103,6 +103,8 @@ You can also provide a text file with regions to exclude from structural variant
 delly call -q 20 -g chr2.fa -x hg19.ex -o sv.bcf tumor.bam control.bam
 ```
 
+#### VCF encoding of structural variants
+
 VCF was originally designed for short variants and that's why all SV callers heavily use the VCF INFO fields to encode additional information about the SV such as the structural variant end (INFO:END) and the SV type (INFO:SVTYPE). You can look at the header of the BCF file using grep where '-A 2' includes the first two structural variant records after the header in the file:
 
 ```bash
