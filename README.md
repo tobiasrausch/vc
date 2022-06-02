@@ -62,22 +62,30 @@ Select a structural vaariant in the region navigator and click 'View', which wil
 You can zoom in and out using the '+' and '-' signs in the toolbar at the top.
 To highlight the abnormal paired-ends please right click in IGV on the BAM file and activate 'View as pairs'. In the same menu, please open 'Color alignments by' and then switch to "pair orientation' for inversions and duplications. For deletions, you want to color the alignments by "insert size". 
 
-Most [1000 Genomes SVs](https://www.nature.com/articles/nature15394) are deletions because these are easier to detect in low coverage sequencing data. Deletions cause a drop in read-depth and can be detected by spanning paired-ends of abnormally large insert size. In addition, split-reads have a prefix alignment before the deletion and a suffix alignment after the deletion. Other SV types such as inversions are much harder to detect because these are balanced rearrangements that do not cause a read-depth change. Besides the simple SV types (deletions, duplications, inversions) one can also find more complex SVs in the germline. Three example regions for that are in the `svs.bed` file.
+### Plotting structural variants
+
+IGV is excellent for interactive browsing but for large numbers of SVs you can use command-line tools such as [wally](https://github.com/tobiasrausch/wally) to plot multiple SVs in batch.
+
+```bash
+wally region -R svs.bed -cp -g chr2.fa tumor.bam control.bam
+```
+
+### Complex structural variants
+
+Even in germline genomes we can observe complex SVs and three example regions are in the `svs.bed` file.
 
 ```bash
 cat svs.bed | grep "complex"
 ```
 
-As part of the SV consortium we validated some of the above complex SVs using PacBio. The reads are in a separate FASTA file called `pacbio.sv1.fa` and `pacbio.sv2.fa`. We need the subsequence of the reference to create a pairwise dotplot of the PacBio read against the reference. [SAMtools](http://www.htslib.org) is a convenient tool to extract such subsequences of a FASTA file.
+As part of the [1000 Genomes SV consortium](https://www.nature.com/articles/nature15394) we validated some of the above complex SVs using PacBio. The reads are in a separate FASTA file called `pacbio.sv1.fa` and `pacbio.sv2.fa`. We need the subsequence of the reference to create a pairwise dotplot of the PacBio read against the reference. [SAMtools](http://www.htslib.org) is a convenient tool to extract such subsequences of a FASTA file.
 
 ```bash
-head pacbio.sv1.fa
-samtools faidx chr2.fa chr2:18905691-18907969
-head pacbio.sv2.fa
-samtools faidx chr2.fa chr2:96210505-96212783
+samtools faidx chr2.fa chr2:18905691-18907969 > sv1.fa
+samtools faidx chr2.fa chr2:96210505-96212783 > sv2.fa
 ```
 
-Please align the above genomic reference subsequences against the respective PacBio read using [Maze](https://www.gear-genomics.com/alfred/) available on [gear-genomics.com](https://www.gear-genomics.com/). 
+Please align the above genomic reference subsequences against the respective PacBio read using [Maze](https://www.gear-genomics.com/maze/) available on [gear-genomics.com](https://www.gear-genomics.com/). 
 
 ***Exercises***
 
