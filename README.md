@@ -85,7 +85,7 @@ samtools faidx chr2.fa chr2:18905691-18907969 > sv1.fa
 samtools faidx chr2.fa chr2:96210505-96212783 > sv2.fa
 ```
 
-Please align the above genomic reference subsequences against the respective PacBio read using [Maze](https://www.gear-genomics.com/maze/) available on [gear-genomics.com](https://www.gear-genomics.com/). 
+Please align the above genomic reference subsequences `sv1.fa` and `sv2.fa` against the respective PacBio read `pacbio.sv1.fa` and `pacbio.sv2.fa` using [Maze](https://www.gear-genomics.com/maze/) available on [gear-genomics.com](https://www.gear-genomics.com/). 
 
 ***Exercises***
 
@@ -93,16 +93,17 @@ Please align the above genomic reference subsequences against the respective Pac
 * What kind of SV is present in the region chr2:96210505-96212783 ?
 
 
-## Structural Variant Calling
+### Somatic structural variant calling
 
-As a first step we will discover structural variants using [Delly](https://github.com/dellytools/delly). [Delly](https://www.ncbi.nlm.nih.gov/pubmed/22962449) calls structural variants jointly on the tumor and normal genome and outputs a [BCF](https://samtools.github.io/hts-specs) file, the binary encoding of [VCF](https://samtools.github.io/hts-specs). You can also provide a text file with regions to exclude from the analysis of structural variants. The default exclude map of Delly removes the telomeric and centromeric regions of all human chromosomes since these regions cannot be accurately analyzed with short-read data.
+[Delly](https://github.com/dellytools/delly) is a method for detecting structural variants. 
+Using the tumor and normal genome alignment, delly calculates structural variants and outputs them as a BCF file, the binary encoding of [VCF](https://samtools.github.io/hts-specs).
+You can also provide a text file with regions to exclude from structural variant analysis. Delly's default exclusion map removes the telomeric and centromeric regions of all human chromosomes because these repetitive regions cannot be analyzed with short-read data.
 
 ```bash
-cd /data/sv
-delly call -n -q 20 -g chr2.fa -x hg19.ex -o sv.bcf tumor.bam control.bam
+delly call -q 20 -g chr2.fa -x hg19.ex -o sv.bcf tumor.bam control.bam
 ```
 
-VCF was originally designed for short variants and that's why all SV callers heavily use the INFO fields to encode additional information about the SV such as the structural variant end (INFO:END) and the SV type (INFO:SVTYPE). You can look at the header of the BCF file using grep, '-A 2' includes the first two structural variant records in the file:
+VCF was originally designed for short variants and that's why all SV callers heavily use the VCF INFO fields to encode additional information about the SV such as the structural variant end (INFO:END) and the SV type (INFO:SVTYPE). You can look at the header of the BCF file using grep where '-A 2' includes the first two structural variant records after the header in the file:
 
 ```bash
 bcftools view sv.bcf | grep "^#" -A 2
