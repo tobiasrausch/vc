@@ -181,7 +181,7 @@ bcftools query -f "%CHROM\t%POS\t%INFO/END\t%INFO/SVTYPE\t%ID\n" somatic.bcf > s
 Rscript cnBafSV.R cnv.cov.gz svs.tsv
 ```
 
-Lastly, we can augment the plots with the allelic depth of SNPs. For the amplifications, we would expect the variant allele frequencies to deviate from the expected 50% for heterozygous variants. To speed up things, we only compute SNPs in the region 1 - 50Mbp.
+Lastly, we can augment the plots with the allelic depth of SNPs. For amplifications, we would expect the variant allele frequencies to deviate from the expected 50% for heterozygous variants. To speed up things, we only compute SNPs in the region 1 - 50Mbp.
 
 ```bash
 bcftools mpileup -d 50 -r chr2:1-50000000 -a FORMAT/AD -f chr2.fa tumor.bam | bcftools call -mv -Ob -o calls.bcf
