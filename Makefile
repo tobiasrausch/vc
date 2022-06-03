@@ -24,5 +24,8 @@ all: ${TARGETS}
 .check: .conda .mamba .tools .rstats .pcks
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && delly --version && touch .check
 
+download: .conda .mamba .tools .rstats .pcks
+	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && cd data/ && gdown ${FILE} && tar -xzf sv.tar.gz && rm sv.tar.gz
+
 clean:
 	rm -rf $(TARGETS) $(TARGETS:=.o) conda/

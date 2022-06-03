@@ -10,24 +10,8 @@ RUN apt-get update && apt-get install -yq \
     g++ \
     git \
     cmake \
-    zlib1g-dev \
-    libbz2-dev \
-    liblzma-dev \
-    libboost-date-time-dev \
-    libboost-program-options-dev \
-    libboost-system-dev \
-    libboost-filesystem-dev \
-    libboost-iostreams-dev \
     python \
     datamash \
-    wget \
-    openjdk-8-jdk \
-    x11-apps \
-    emacs \
-    r-base \
-    firefox \
-    libcurl4-openssl-dev \
-    libxml2-dev \
     gthumb \
     pkg-config \
     && apt-get clean
