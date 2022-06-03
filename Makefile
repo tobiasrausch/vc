@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 # Targets
-TARGETS = .conda .mamba .tools .check
+TARGETS = .conda .mamba .tools .rstats .pcks .check
 PBASE=$(shell pwd)
 
 all: ${TARGETS}
@@ -19,10 +19,13 @@ all: ${TARGETS}
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda bioconductor-genomicfeatures r-ggplot2 r-reshape2 bioconductor-dnacopy && touch .rstats
 
 .pcks: .conda .mamba .tools .rstats
-	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda cyvcf2 numpy pysam && touch .pcks
+	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba install -y -c conda-forge -c bioconda cyvcf2 numpy pysam && pip install gdown && touch .pcks
 
 .check: .conda .mamba .tools .rstats .pcks
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && delly --version && touch .check
+
+test:
+	cat README.md | awk '/^```bash$/,/^```$/  {print} {next}' | grep -v '^`' > run.sh && ./run.sh && rm run.sh
 
 clean:
 	rm -rf $(TARGETS) $(TARGETS:=.o) conda/

@@ -27,7 +27,7 @@ as, for example, paired-end methods are hampered by skewed insert size distribut
 cd data/sv/
 samtools flagstat tumor.bam
 alfred qc -r chr2.fa -o qc.tsv.gz -j qc.json.gz tumor.bam
-zcat qc.tsv.gz | grep ^ME | datamash transpose | column -t
+zcat qc.tsv.gz | grep ^ME | datamash transpose
 ```
 
 Instead of parsing the tab-delimited file, you can also upload the JSON file `qc.json.gz` to the [Alfred web application](https://www.gear-genomics.com/alfred/).
@@ -167,50 +167,24 @@ bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID\n" somatic.bcf | awk '$3-$2>1000
 wally region -R somatic.bp.bed -s 2 -cp -g chr2.fa tumor.bam control.bam
 ```
 
-### Copy-number segmentation
-
-To reveal copy-number gains and losses we can use delly's cnv mode. For a simple read-depth plot we can use:
+To reveal any higher-order SV class such as chromothripsis we need to integrate read-depth with structural variant predictions. Let's first create a simple read-depth plot.
 
 ```bash
 delly cnv -u -z 10000 -o cnv.bcf -c cnv.cov.gz -g chr2.fa -m chr2.map.fa tumor.bam 
 Rscript cnBafSV.R cnv.cov.gz
 ```
 
-We can also overlay the copy-number segmentation using
+Now we can overlay the somatic structural variants on top of the read-depth information.
 
 ```bash
-bcftools query -s tumor -f "%CHROM\t%POS\t%INFO/END\t%ID\t[%RDCN]\n" cnv.bcf > segmentation.bed
-Rscript cnBafSV.R cnv.cov.gz segmentation.bed
+bcftools query -f "%CHROM\t%POS\t%INFO/END\t%INFO/SVTYPE\t%ID\n" somatic.bcf > svs.tsv
+Rscript cnBafSV.R cnv.cov.gz svs.tsv
 ```
 
-
-To reveal any higher-order SV class such as chromothripsis we need to integrate read-depth with structural variant predictions and visualize the B-allele frequency of germline SNPs to highlight loss-of-heterozygosity (LOH) events.
-
-```bash
-coral call -m chr2.map.fa -g chr2.fa -v chr2.snps.bcf -l control.bam -s id -o out tumor.bam
-zcat out.adaptive.cov.gz | head
-```
-
-A simple read-depth plot can then be generated using
+Lastly, we can augment the plots with the allelic depth of SNPs. For the amplifications, we would expect the variant allele frequencies to deviate from the expected 50% for heterozygous variants. To speed up things, we only compute SNPs in the region 1 - 50Mbp.
 
 ```bash
-Rscript cnBafSV.R out.adaptive.cov.gz
-open cov.png
-```
-
-Next, we will try to visualize the somatic SV calls on top of the log2 read-depth ratio plot.
-
-```bash
-svprops somatic.bcf > svs.tsv
-head svs.tsv
-Rscript cnBafSV.R out.adaptive.cov.gz svs.tsv
-open cov.png
-```
-
-Lastly, we can augment the plots with the allelic depth of SNPs. For the amplifications, we would expect the B-allele frequency to branch, similar to LOH patterns for somatic deletions.
-
-```bash
-zcat out.baf.gz | head
-Rscript cnBafSV.R out.adaptive.cov.gz svs.tsv out.baf.gz
-open cov.png
+bcftools mpileup -d 50 -r chr2:1-50000000 -a FORMAT/AD -f chr2.fa tumor.bam | bcftools call -mv -Ob -o calls.bcf
+bcftools view -g het -m2 -M2 -v snps calls.bcf | bcftools query -f "%POS,[%AD\n]" - | awk 'BEGIN {FS=","} $2+$3>10 {print $1"\t"$3/($2+$3);}' > baf.tsv
+Rscript cnBafSV.R cnv.cov.gz svs.tsv baf.tsv 
 ```
