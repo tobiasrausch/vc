@@ -24,8 +24,5 @@ all: ${TARGETS}
 .check: .conda .mamba .tools .rstats .pcks
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && delly --version && touch .check
 
-test:
-	cat README.md | awk '/^```bash$/,/^```$/  {print} {next}' | grep -v '^`' > run.sh && ./run.sh && rm run.sh
-
 clean:
 	rm -rf $(TARGETS) $(TARGETS:=.o) conda/
