@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 # maintainer
 MAINTAINER Tobias Rausch rausch@embl.de
 
-# install required packages
+# install required apt packages
 RUN apt-get update && apt-get install -yq \
     build-essential \
     g++ \
