@@ -10,10 +10,12 @@ RUN apt-get update && apt-get install -yq \
     g++ \
     git \
     cmake \
+    gthumb \
     python \
     datamash \
     gthumb \
     pkg-config \
+    wget
     && apt-get clean
 
 # install tutorial tools
