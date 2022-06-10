@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -yq \
     datamash \
     gthumb \
     pkg-config \
-    wget
+    wget \
     && apt-get clean
 
 # install tutorial tools
