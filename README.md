@@ -1,6 +1,6 @@
 # Structural variant calling tutorial using [delly](https://github.com/dellytools/delly).
 
-## Installation
+## Installation - Linux
 
 `make all`
 
@@ -9,6 +9,21 @@
 ```bash
 export PATH=`pwd`/conda/bin:${PATH}
 source activate base
+```
+
+## Installation - Mac OS (tested on Intel)
+
+## Load the conda environment with all required tools
+```bash
+conda env create -f environment.yml
+```
+
+## Download and unpack the required file(s)
+```bash
+cd data/ \
+gdown 1STArDotQWnzqVK3r5ja4xh5m5o59nfdf \
+tar -xzf sv.tar.gz \
+rm sv.tar.gz
 ```
 
 ## SV Calling

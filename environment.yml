@@ -1,4 +1,4 @@
-name: vc_final 
+name: vc 
 channels:
   - bioconda
   - conda-forge
