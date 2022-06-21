@@ -2,29 +2,30 @@
 
 ## Installation - Linux
 
+Installation of required tools using conda:
+
 `make all`
 
-## Load the conda environment with all required tools
+Download the course data:
+
+`make FILE=1STArDotQWnzqVK3r5ja4xh5m5o59nfdf download`
+
+Load the conda environment with all required tools
 
 ```bash
 export PATH=`pwd`/conda/bin:${PATH}
 source activate base
 ```
 
-## Installation - Mac OS (tested on Intel)
+## Installation - Mac OS
 
-## Load the conda environment with all required tools
-```bash
-conda env create -f environment.yml
-```
+Load the conda environment with all required tools
 
-## Download and unpack the required file(s)
-```bash
-cd data/ \
-gdown 1STArDotQWnzqVK3r5ja4xh5m5o59nfdf \
-tar -xzf sv.tar.gz \
-rm sv.tar.gz
-```
+`conda env create -f environment.yml`
+
+Download and unpack the course data
+
+`cd data/ && gdown 1STArDotQWnzqVK3r5ja4xh5m5o59nfdf && tar -xzf sv.tar.gz && rm sv.tar.gz`
 
 ## SV Calling
 
