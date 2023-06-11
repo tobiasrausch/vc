@@ -8,7 +8,7 @@ Installation of required tools using conda:
 
 Download the course data:
 
-`make FILE=1STArDotQWnzqVK3r5ja4xh5m5o59nfdf download`
+`make FILE=1nxzjQFt33ch1P_nWF66q1tkHv5gxTaKb download`
 
 Load the conda environment with all required tools
 
@@ -25,7 +25,7 @@ Load the conda environment with all required tools
 
 Download and unpack the course data
 
-`cd data/ && gdown 1STArDotQWnzqVK3r5ja4xh5m5o59nfdf && tar -xzf sv.tar.gz && rm sv.tar.gz`
+`cd data/ && gdown 1nxzjQFt33ch1P_nWF66q1tkHv5gxTaKb && tar -xzf sv.tar.gz && rm sv.tar.gz`
 
 ## SV Calling
 
