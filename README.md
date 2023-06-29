@@ -10,12 +10,6 @@ Download the course data:
 
 `make FILE=1nxzjQFt33ch1P_nWF66q1tkHv5gxTaKb download`
 
-Load the mamba environment with all required tools
-
-```bash
-export PATH=`pwd`/mamba/bin:${PATH}
-```
-
 ## Installation - Mac OS
 
 Load the conda environment with all required tools
@@ -25,6 +19,18 @@ Load the conda environment with all required tools
 Download and unpack the course data
 
 `cd data/ && gdown 1nxzjQFt33ch1P_nWF66q1tkHv5gxTaKb && tar -xzf sv.tar.gz && rm sv.tar.gz`
+
+
+## Load the software stack
+
+Load the mamba environment with all required tools
+
+```bash
+if [ ! -z ${CONDA_PREFIX+x} ]; then conda deactivate; fi
+export PATH=`pwd`/mamba/bin:${PATH}
+```
+
+
 
 ## SV Calling
 
