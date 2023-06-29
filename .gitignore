@@ -4,6 +4,7 @@
 .tools
 .pcks
 .rstats
+run.sh
 mamba/
 data/
 *~
