@@ -10,11 +10,10 @@ Download the course data:
 
 `make FILE=1nxzjQFt33ch1P_nWF66q1tkHv5gxTaKb download`
 
-Load the conda environment with all required tools
+Load the mamba environment with all required tools
 
 ```bash
-export PATH=`pwd`/conda/bin:${PATH}
-source activate base
+export PATH=`pwd`/mamba/bin:${PATH}
 ```
 
 ## Installation - Mac OS
