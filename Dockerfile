@@ -7,6 +7,7 @@ MAINTAINER Tobias Rausch rausch@embl.de
 # install required apt packages
 RUN apt-get update && apt-get install -yq \
     build-essential \
+    curl \
     g++ \
     git \
     cmake \
