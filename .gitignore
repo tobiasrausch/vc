@@ -4,6 +4,6 @@
 .tools
 .pcks
 .rstats
-conda/
+mamba/
 data/
 *~
