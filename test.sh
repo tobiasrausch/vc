@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -d conda/ ]
+if [ -d mamba/ ]
 then
     if [ -d data/sv/ ]
     then
