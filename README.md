@@ -49,7 +49,7 @@ alfred qc -r chr2.fa -o qc.tsv.gz -j qc.json.gz tumor.bam
 zcat qc.tsv.gz | grep ^ME | datamash transpose
 ```
 
-Instead of parsing the tab-delimited file, you can also upload the JSON file `qc.json.gz` to the [Alfred web application](https://www.gear-genomics.com/alfred/).
+Instead of parsing the tab-delimited file, you can also upload the JSON file `qc.json.gz` to the [Alfred web application](https://www.gear-genomics.com/alfred/) available on [gear-genomics.com](https://www.gear-genomics.com/). 
 
 
 As you can see from the QC results, the data has been downsampled to 7x coverage to speed up all analyses.
@@ -77,7 +77,7 @@ igv -g chr2.fa
 
 Once IGV has started use 'File' and 'Load from File' to load the `tumor.bam` and `control.bam` alignment file. Then import the `svs.bed` file from your working directory using 'Regions' and 'Import Regions'.
 You can then easily navigate to the structural variants with 'Regions' and 'Region Navigator'.
-Select a structural vaariant in the region navigator and click 'View', which will center the IGV alignment view on the selected structural variant.
+Select a structural variant in the region navigator and click 'View', which will center the IGV alignment view on the selected structural variant.
 You can zoom in and out using the '+' and '-' signs in the toolbar at the top.
 To highlight the abnormal paired-ends please right click in IGV on the BAM file and activate 'View as pairs'. In the same menu, please open 'Color alignments by' and then switch to "pair orientation' for inversions and duplications. For deletions, you want to color the alignments by "insert size". 
 
@@ -100,11 +100,18 @@ cat svs.bed | grep "complex"
 As part of the [1000 Genomes SV consortium](https://www.nature.com/articles/nature15394) we validated some of the above complex SVs using PacBio. The reads are in a separate FASTA file called `pacbio.sv1.fa` and `pacbio.sv2.fa`. We need the subsequence of the reference to create a pairwise dotplot of the PacBio read against the reference. [SAMtools](http://www.htslib.org) is a convenient tool to extract such subsequences of a FASTA file.
 
 ```bash
-samtools faidx chr2.fa chr2:18905691-18907969 > sv1.fa
-samtools faidx chr2.fa chr2:96210505-96212783 > sv2.fa
+samtools faidx chr2.fa chr2:18905691-18907969 | sed 's/^>.*$/>reference/' > sv1.fa
+samtools faidx chr2.fa chr2:96210505-96212783 | sed 's/^>.*$/>reference/' > sv2.fa
 ```
 
-Please align the above genomic reference subsequences `sv1.fa` and `sv2.fa` against the respective PacBio read `pacbio.sv1.fa` and `pacbio.sv2.fa` using [Maze](https://www.gear-genomics.com/maze/) available on [gear-genomics.com](https://www.gear-genomics.com/). 
+Please create a dot plot of the above genomic reference subsequences `sv1.fa` and `sv2.fa` against the respective PacBio read `pacbio.sv1.fa` and `pacbio.sv2.fa` using [Maze](https://www.gear-genomics.com/maze/) or on the command-line using [wally](https://github.com/tobiasrausch/wally).
+
+```bash
+cat pacbio.sv1.fa >> sv1.fa
+wally dotplot sv1.fa
+cat pacbio.sv2.fa >> sv2.fa
+wally dotplot sv1.fa
+```
 
 ***Exercises***
 
