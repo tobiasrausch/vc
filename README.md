@@ -186,7 +186,7 @@ bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID[\t%GT]\n" somatic.bcf
 
 ### Complex structural variant visualization
 
-IGV and [wally](https://github.com/tobiasrausch/wally) support so-called split views to visualize the breakpoints of long-range SVs greater than 10,000kbp.
+[IGV](http://software.broadinstitute.org/software/igv/) and [wally](https://github.com/tobiasrausch/wally) support so-called split views to visualize the breakpoints of long-range SVs greater than 10,000kbp.
 
 ```bash
 bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID\n" somatic.bcf | awk '$3-$2>10000 {print $1"\t"($2-500)"\t"($2+500)"\t"$4"L\n"$1"\t"($3-500)"\t"($3+500)"\t"$4"R";}' > somatic.bp.bed
