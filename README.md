@@ -193,7 +193,7 @@ bcftools query -f "%CHROM\t%POS\t%INFO/END\t%ID\n" somatic.bcf | awk '$3-$2>1000
 wally region -R somatic.bp.bed -s 2 -cp -g chr2.fa tumor.bam control.bam
 ```
 
-To reveal any higher-order SV class such as chromothripsis we need to integrate read-depth with structural variant predictions. Let's first create a simple read-depth plot.
+Such SV breakpoint views cannot reveal any higher-order SV class such as chromothripsis so we need to integrate read-depth with structural variant predictions to get a better overview of complex somatic rearrangements. Let's first create a simple read-depth plot.
 
 ```bash
 delly cnv -u -z 10000 -o cnv.bcf -c cnv.cov.gz -g chr2.fa -m chr2.map.fa tumor.bam 
