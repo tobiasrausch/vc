@@ -30,18 +30,16 @@ if [ ! -z ${CONDA_PREFIX+x} ]; then conda deactivate; fi
 export PATH=`pwd`/mamba/bin:${PATH}
 ```
 
-
-
 ## SV Calling
 
 ### Discovery of chromothripsis in a cancer sample
 
-In this practical we will analyze germline and somatic structural variants (SVs) of a chromothripsis sample from a recent [cancer study](https://www.ncbi.nlm.nih.gov/pubmed/22265402). The anonymized data was filtered for chr2 to speed up all subsequent analysis. The tumor genome alignment file is named `tumor.bam` and the control genome alignment file is named `control.bam`.
+In this practical we will analyze germline and somatic structural variants (SVs) of a chromothripsis sample from this [cancer study](https://www.ncbi.nlm.nih.gov/pubmed/22265402). The anonymized data was filtered for chr2 to speed up all subsequent analysis. The tumor genome alignment file is named `tumor.bam` and the control genome alignment file is named `control.bam`.
 
 ### Structural variant alignment quality control
 
 Before each discovery of structural variants, you should assess the quality of the data,
-as, for example, paired-end methods are hampered by skewed insert size distributions, read-depth methods by uneven coverage, and split-read methods by high sequencing error rates. Common quality criteria are e.g. the percentage of reads mapped, number of singletons and duplicates, number of properly paired reads and the shape of the insert size and coverage distributions. 
+as, for example, paired-end methods are hampered by skewed insert size distributions, read-depth methods by uneven coverage, and split-read methods by high sequencing error rates. Common quality criteria are the percentage of reads mapped, the duplicate rate, number of properly paired reads and the shape of the insert size and coverage distributions. 
 [Picard](http://broadinstitute.github.io/picard/), [SAMtools](http://www.htslib.org), [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [Alfred](https://github.com/tobiasrausch/alfred) are commonly used quality control tools that compute some of these alignment statistics as shown below for the tumor sample.
 
 ```bash
@@ -55,7 +53,7 @@ Instead of parsing the tab-delimited file, you can also upload the JSON file `qc
 
 
 As you can see from the QC results, the data has been downsampled to 7x coverage to speed up all analyses.
-This implies that some SVs will have only weak support due to low coverage. In terms of QC interpretation, there are some general things to look out for, such as mapping percentages below 70%, >20% duplicates, or multiple peaks in the insert size distribution. Notice that many alignment statistics vary greatly depending on the protocol used, so it's usually best to compare several different sequencing runs from the same protocol (DNA-seq, RNA-seq, ChIP-seq, paired-end, single-end, or mate-pair) to highlight outliers.
+This implies that some SVs will have only weak support due to low coverage. In terms of QC interpretation, there are some general things to look out for, such as mapping percentages below 70%, >20% duplicates, or multiple peaks in the insert size distribution. Please note that many alignment statistics vary greatly depending on the protocol used, so it's usually best to compare several different sequencing runs from the same protocol (DNA-seq, RNA-seq, ChIP-seq, paired-end, single-end, or mate-pair) to highlight outliers.
  
 #### Exercises
 
