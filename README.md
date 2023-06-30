@@ -110,7 +110,7 @@ Please create a dot plot of the above genomic reference subsequences `sv1.fa` an
 cat pacbio.sv1.fa >> sv1.fa
 wally dotplot sv1.fa
 cat pacbio.sv2.fa >> sv2.fa
-wally dotplot sv1.fa
+wally dotplot sv2.fa
 ```
 
 ***Exercises***
