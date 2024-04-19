@@ -114,7 +114,7 @@ samtools faidx chr2.fa chr2:18905691-18907969 | sed 's/^>.*$/>reference/' > sv1.
 samtools faidx chr2.fa chr2:96210505-96212783 | sed 's/^>.*$/>reference/' > sv2.fa
 ```
 
-Please create a dot plot of the above genomic reference subsequences `sv1.fa` and `sv2.fa` against the respective PacBio read `pacbio.sv1.fa` and `pacbio.sv2.fa` using [Maze](https://www.gear-genomics.com/maze/) or on the command-line using [wally](https://github.com/tobiasrausch/wally).
+Please create a dot plot of the above genomic reference subsequences `sv1.fa` and `sv2.fa` against the respective PacBio read `pacbio.sv1.fa` and `pacbio.sv2.fa` using [wally](https://github.com/tobiasrausch/wally).
 
 ```bash
 cat pacbio.sv1.fa >> sv1.fa
