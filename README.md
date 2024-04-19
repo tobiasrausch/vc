@@ -5,6 +5,7 @@
 Installation of required libraries depends on your linux distribution, e.g., for Ubuntu:
 
 `apt-get update`
+
 `apt-get install -y autoconf build-essential cmake g++ git libcurl4-gnutls-dev libbz2-dev libdeflate-dev libncurses-dev liblzma-dev pkg-config zlib1g-dev`
 
 Then clone the repository and install all dependencies using mamba:
