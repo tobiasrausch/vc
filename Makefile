@@ -13,7 +13,7 @@ all: ${TARGETS}
 	export PATH=${PBASE}/mamba/bin:${PATH} && mamba install -y -c conda-forge -c bioconda datamash samtools bcftools bedtools htslib bwa delly alfred freebayes igv wally minimap2 && touch .tools
 
 .rstats: .mamba .tools
-	export PATH=${PBASE}/mamba/bin:${PATH} && mamba install -y -c conda-forge -c bioconda bioconductor-genomicfeatures r-ggplot2 r-reshape2 bioconductor-dnacopy && touch .rstats
+	export PATH=${PBASE}/mamba/bin:${PATH} && mamba install -y -c conda-forge -c bioconda bioconductor-genomicfeatures r-ggplot2 r-reshape2 r-gridextra r-cowplot bioconductor-dnacopy && touch .rstats
 
 .pcks: .mamba .tools .rstats
 	export PATH=${PBASE}/mamba/bin:${PATH} && mamba install -y -c conda-forge -c bioconda cyvcf2 numpy pysam && pip install gdown && touch .pcks
