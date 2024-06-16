@@ -22,7 +22,7 @@ all: ${TARGETS}
 	export PATH="${PBASE}/mamba/bin:${PATH}" && delly --version && touch .check
 
 download: .mamba .tools .rstats .pcks
-	export PATH="${PBASE}/mamba/bin:${PATH}" && cd data/ && gdown ${FILE} && tar -xzf sv.tar.gz && rm sv.tar.gz
+	export PATH="${PBASE}/mamba/bin:${PATH}" && cd data/ && gdown ${FILE} && tar -xzf sv.tar.gz && cp ${PBASE}/scripts/cnBafSV.R ${PBASE}/data/sv/ && rm sv.tar.gz
 
 clean:
 	rm -rf $(TARGETS) $(TARGETS:=.o) mamba/
