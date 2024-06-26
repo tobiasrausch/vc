@@ -20,17 +20,6 @@ Download the course data:
 
 `make FILE=1nxzjQFt33ch1P_nWF66q1tkHv5gxTaKb download`
 
-## Installation - Mac OS
-
-Load the conda environment with all required tools
-
-`conda env create -f environment.yml`
-
-Download and unpack the course data
-
-`cd data/ && gdown 1nxzjQFt33ch1P_nWF66q1tkHv5gxTaKb && tar -xzf sv.tar.gz && rm sv.tar.gz`
-
-
 ## Load the software stack
 
 Load the mamba environment with all required tools
