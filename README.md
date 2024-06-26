@@ -89,7 +89,7 @@ Once IGV has started use 'File' and 'Load from File' to load the `tumor.bam` and
 You can then easily navigate to the structural variants with 'Regions' and 'Region Navigator'.
 Select a structural variant in the region navigator and click 'View', which will center the IGV alignment view on the selected structural variant.
 You can zoom in and out using the '+' and '-' signs in the toolbar at the top.
-To highlight the abnormal paired-ends please right click in IGV on the BAM file and activate 'View as pairs'. In the same menu, please open 'Color alignments by' and then switch to "pair orientation' for inversions and duplications. For deletions, you want to color the alignments by "insert size". 
+To highlight the abnormal paired-ends please right click in IGV on the BAM file and activate 'View as pairs'. In the same menu, please open 'Color alignments by' and then switch to "pair orientation' for inversions and duplications. For deletions, you want to color the alignments by "insert size". You may also want to visualize clipped reads using the 'View' menu, then click 'Preferences...' and then click the 'Alignments' tab to switch on 'Show soft-clipped reads'. IGV has also an option to view paired-ends in split-screen. You can simply right click on a given read and select 'View mate in split-screen'.
 
 ### Plotting structural variants
 
