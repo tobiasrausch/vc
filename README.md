@@ -1,3 +1,7 @@
+[![Docker CI](https://github.com/tobiasrausch/vc/workflows/Docker%20CI/badge.svg)](https://hub.docker.com/r/trausch/vc/)
+[![GitHub license](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/tobiasrausch/vc/blob/master/LICENSE)
+[![GitHub Releases](https://img.shields.io/github/release/tobiasrausch/vc.svg)](https://github.com/tobiasrausch/vc/releases)
+
 # Structural variant calling tutorial using [delly](https://github.com/dellytools/delly).
 
 ## Installation - Linux
