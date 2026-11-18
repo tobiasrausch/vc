@@ -217,3 +217,7 @@ bcftools mpileup -d 50 -r chr2:1-50000000 -a FORMAT/AD -f chr2.fa tumor.bam | bc
 bcftools view -g het -m2 -M2 -v snps calls.bcf | bcftools query -f "%POS,[%AD\n]" - | awk 'BEGIN {FS=","} $2+$3>10 {print $1"\t"$3/($2+$3);}' > baf.tsv
 Rscript cnBafSV.R cnv.cov.gz svs.tsv baf.tsv 
 ```
+
+### Credits
+
+The development of [Delly](https://github.com/dellytools/delly) and [GEAR](https://www.gear-genomics.com/) is partly funded by [de.NBI](https://www.denbi.de). Please help us improve by taking our short user survey for [delly](https://www.surveymonkey.de/r/denbi-service?sc=hd-hub&tool=delly) and [GEAR](https://www.surveymonkey.de/r/denbi-service?sc=hd-hub&tool=gear).
